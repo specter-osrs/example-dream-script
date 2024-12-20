@@ -1,2 +1,4 @@
 public enum Stage {
+    INITIALIZING,
+
 }
