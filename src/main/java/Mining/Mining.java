@@ -135,10 +135,10 @@ public class Mining extends MethodProvider {
             if (Inventory.isEmpty()){
                 return;
             }
-            if (!BankLocation.getNearest().getArea(1).contains(Players.getLocal())) {
-                Walking.walk(BankLocation.getNearest().getCenter().getArea(1).getRandomTile());
+            if (!BankLocation.getNearest().getArea(7).contains(Players.getLocal())) {
+                Walking.walk(BankLocation.getNearest().getCenter().getArea(3).getRandomTile());
             }
-            if (BankLocation.getNearest().getArea(5).contains(Players.getLocal())) {
+            if (BankLocation.getNearest().getArea(7).contains(Players.getLocal())) {
                 if(Bank.isOpen()){
                     sleep(Calculations.random(150,500));
                     Bank.depositAllExcept(i->i.getName().toLowerCase().contains("pickaxe"));
