@@ -22,7 +22,7 @@ import java.util.Objects;
 
 public class Mining extends MethodProvider {
 
-    public Timer animationTimer = new Timer(950);
+    public Timer animationTimer = new Timer(Calculations.random(850,1300));
     public void resetAnimationTimer(){
         animationTimer.reset();
         animationTimer.start();
@@ -87,15 +87,16 @@ public class Mining extends MethodProvider {
 
         //----COPPER-------//
 
-        if (canMine() && currentRock.contains("Copper")) {
+        if (!Inventory.isFull() && canMine() && currentRock.contains("Copper")) {
             if (!lumbridgeCopperRocks.contains(Players.getLocal())){
                 Walking.walk(lumbridgeCopperRocks);
          }
             if(lumbridgeCopperRocks.contains(Players.getLocal())){
+                sleep(Calculations.random(150,500));
                 mineTargetRock();
             }
         }
-        if (canMine() && currentRock.contains("Tin")) {
+        if (!Inventory.isFull() &&  canMine() && currentRock.contains("Tin")) {
             if (!lumbridgeTinRocks.contains(Players.getLocal())){
                 Walking.walk(lumbridgeTinRocks);
             }
@@ -139,17 +140,21 @@ public class Mining extends MethodProvider {
             }
             if (BankLocation.getNearest().getArea(5).contains(Players.getLocal())) {
                 if(Bank.isOpen()){
+                    sleep(Calculations.random(150,500));
                     Bank.depositAllExcept(i->i.getName().toLowerCase().contains("pickaxe"));
+                    sleep(Calculations.random(150,500));
                     Bank.close();
+                    sleep(Calculations.random(350,1250));
                 }
                 if(!Bank.isOpen() && Inventory.contains(i->i.getName().toLowerCase().contains("ore")) || Inventory.contains(i->i.getName().toLowerCase().contains("bar"))|| Inventory.contains(i->i.getName().toLowerCase().contains("uncut"))) {
                     Bank.open();
-                    sleep(250);
+                    sleep(Calculations.random(350,1250));
                     }
                 }
             }
 
             public Timer microSleepTimer = new Timer(Calculations.random(60000,180000));
+
 
     }
 
