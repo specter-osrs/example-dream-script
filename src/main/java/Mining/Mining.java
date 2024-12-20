@@ -1,5 +1,6 @@
 package Mining;
 
+import org.dreambot.api.methods.Calculations;
 import org.dreambot.api.methods.MethodProvider;
 import org.dreambot.api.methods.container.impl.Inventory;
 import org.dreambot.api.methods.container.impl.bank.Bank;
@@ -74,11 +75,19 @@ public class Mining extends MethodProvider {
 
 
     public void runBronzeBars() {
+        if (Players.getLocal().isMoving()) sleep(Calculations.random(150,500));
         if (Inventory.isFull()) {
             bankOres();
+        }
         if(Players.getLocal().isAnimating()) resetAnimationTimer();
-        currentRock = "Copper";
-        if (canMine()) {
+
+        if(Inventory.isEmpty()) currentRock = "Copper";
+        if(Inventory.count(436) >= 14) currentRock = "Tin";
+        if(Inventory.count(436) < 14) currentRock = "Copper";
+
+        //----COPPER-------//
+
+        if (canMine() && currentRock.contains("Copper")) {
             if (!lumbridgeCopperRocks.contains(Players.getLocal())){
                 Walking.walk(lumbridgeCopperRocks);
          }
@@ -86,17 +95,27 @@ public class Mining extends MethodProvider {
                 mineTargetRock();
             }
         }
+        if (canMine() && currentRock.contains("Tin")) {
+            if (!lumbridgeTinRocks.contains(Players.getLocal())){
+                Walking.walk(lumbridgeTinRocks);
+            }
+            if(lumbridgeTinRocks.contains(Players.getLocal())){
+                mineTargetRock();
+            }
+        }
+
+        //------TIN-------//
 
         }
 
-    }
+
 
     public void mineTargetRock(){
         if(animationTimer.remaining()!=0) {
             sleep(150);
         }
         if(!canMine()){
-            sleep(150);
+            sleep(Calculations.random(150,1250));
             return;
         }
         GameObject targetRock = GameObjects.closest(x -> x.toString().toLowerCase().contains(currentRock.toLowerCase()) && x.hasAction("Mine"));
@@ -129,6 +148,8 @@ public class Mining extends MethodProvider {
                     }
                 }
             }
+
+            public Timer microSleepTimer = new Timer(Calculations.random(60000,180000));
 
     }
 
