@@ -115,10 +115,7 @@ public class Mining extends MethodProvider {
         if(animationTimer.remaining()!=0) {
             sleep(150);
         }
-        if(!canMine()){
-            sleep(Calculations.random(150,1250));
-            return;
-        }
+
         GameObject targetRock = GameObjects.closest(x -> x.toString().toLowerCase().contains(currentRock.toLowerCase()) && x.hasAction("Mine"));
         if (!targetRock.getName().toLowerCase().contains(currentRock.toLowerCase())) {
             targetRock = GameObjects.closest(x -> x.toString().toLowerCase().contains(currentRock.toLowerCase()) && x.hasAction("Mine"));
@@ -135,8 +132,8 @@ public class Mining extends MethodProvider {
             if (Inventory.isEmpty()){
                 return;
             }
-            if (!BankLocation.getNearest().getArea(5).contains(Players.getLocal())) {
-                Walking.walk(BankLocation.getNearest().getCenter().getArea(5).getRandomTile());
+            if (!BankLocation.getNearest().getArea(1).contains(Players.getLocal())) {
+                Walking.walk(BankLocation.getNearest().getCenter().getArea(1).getRandomTile());
             }
             if (BankLocation.getNearest().getArea(5).contains(Players.getLocal())) {
                 if(Bank.isOpen()){
