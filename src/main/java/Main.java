@@ -13,43 +13,17 @@ import java.awt.*;
 public class Main extends AbstractScript {
 
     Mining mining = new Mining();
+
     //-------ON SCRIPT START-------//
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
+
 
     //-------MAIN LOOP-------//
     @Override
     public int onLoop() {
         mining.run();
 
-        return 10;
+        return 500;
 
-    }
-
-    //-------PAINT LOOP-------//
-    @Override
-    public void onPaint(Graphics graphics) {
-        super.onPaint(graphics);
-    }
-
-    //-------ON SCRIPT EXIT-------//
-    @Override
-    public void onExit() {
-        super.onExit();
-    }
-
-    //-------ON SCRIPT PAUSED-------//
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    //-------ON SCRIPT RESUMED-------//
-    @Override
-    public void onResume() {
-        super.onResume();
     }
 
 }

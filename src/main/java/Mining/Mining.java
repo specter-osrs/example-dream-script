@@ -1,6 +1,5 @@
 package Mining;
 
-import jdk.internal.org.objectweb.asm.commons.Method;
 import org.dreambot.api.methods.MethodProvider;
 import org.dreambot.api.methods.container.impl.Inventory;
 import org.dreambot.api.methods.container.impl.bank.Bank;
@@ -13,12 +12,16 @@ import org.dreambot.api.methods.skills.Skill;
 import org.dreambot.api.methods.skills.Skills;
 import org.dreambot.api.methods.walking.impl.Walking;
 import org.dreambot.api.script.AbstractScript;
+
 import org.dreambot.api.utilities.Timer;
 import org.dreambot.api.wrappers.interactive.GameObject;
 
+import java.util.Objects;
+
+
 public class Mining extends MethodProvider {
 
-    public Timer animationTimer = new Timer(1850);
+    public Timer animationTimer = new Timer(950);
     public void resetAnimationTimer(){
         animationTimer.reset();
         animationTimer.start();
@@ -38,10 +41,10 @@ public class Mining extends MethodProvider {
         if(currentStage != null){
             currentStage = Stage.BRONZE_BARS;
         }
-        if(Skills.getRealLevel(Skill.MINING) < 41){
+        if(Skills.getRealLevel(Skill.MINING) < 99){
             currentStage=Stage.BRONZE_BARS;
         }
-        if(Skills.getRealLevel(Skill.MINING) >= 41){
+        if(Skills.getRealLevel(Skill.MINING) >= 99){
             currentStage=Stage.IRON_POWERMINING;
         }
     }
@@ -71,29 +74,40 @@ public class Mining extends MethodProvider {
 
 
     public void runBronzeBars() {
+        if (Inventory.isFull()) {
+            bankOres();
+        if(Players.getLocal().isAnimating()) resetAnimationTimer();
         currentRock = "Copper";
         if (canMine()) {
-            if (GameObjects.closest(i -> i.getName().toLowerCase().contains(currentRock)).exists()) {
-                mineTargetRock();
-            }
             if (!lumbridgeCopperRocks.contains(Players.getLocal())){
                 Walking.walk(lumbridgeCopperRocks);
          }
+            if(lumbridgeCopperRocks.contains(Players.getLocal())){
+                mineTargetRock();
+            }
         }
-        if (Inventory.isFull()) {
-            bankOres();
+
         }
+
     }
 
     public void mineTargetRock(){
-        GameObject targetRock = GameObjects.closest(x -> x.toString().toLowerCase().contains(currentRock) && x.hasAction("Mine"));
-        if (!targetRock.getName().toLowerCase().contains(currentRock)) {
-            targetRock = GameObjects.closest(x -> x.toString().toLowerCase().contains(currentRock) && x.hasAction("Mine"));
-        }
-        if(canMine()){
-            targetRock.interactForceLeft("Mine");
+        if(animationTimer.remaining()!=0) {
             sleep(150);
+        }
+        if(!canMine()){
+            sleep(150);
+            return;
+        }
+        GameObject targetRock = GameObjects.closest(x -> x.toString().toLowerCase().contains(currentRock.toLowerCase()) && x.hasAction("Mine"));
+        if (!targetRock.getName().toLowerCase().contains(currentRock.toLowerCase())) {
+            targetRock = GameObjects.closest(x -> x.toString().toLowerCase().contains(currentRock.toLowerCase()) && x.hasAction("Mine"));
+        }
+        if(canMine() && targetRock!=null){
+            targetRock.interactForceLeft("Mine");
+            sleep(500);
             resetAnimationTimer();
+             targetRock = GameObjects.closest(x -> x.toString().toLowerCase().contains(currentRock.toLowerCase()) && x.hasAction("Mine"));
         }
     }
 
