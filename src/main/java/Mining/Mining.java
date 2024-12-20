@@ -1,5 +1,6 @@
 package Mining;
 
+import org.dreambot.api.input.Mouse;
 import org.dreambot.api.methods.Calculations;
 import org.dreambot.api.methods.MethodProvider;
 import org.dreambot.api.methods.container.impl.Inventory;
@@ -54,6 +55,7 @@ public class Mining extends MethodProvider {
 
 
     public void run() {
+        moveMouse();
         setCurrentStage();
         switch(currentStage){
             case BRONZE_BARS:
@@ -70,6 +72,7 @@ public class Mining extends MethodProvider {
         //tin rocks object id = 11361
 
         //----------------
+
 
     }
 
@@ -151,8 +154,15 @@ public class Mining extends MethodProvider {
             }
 
             public Timer microSleepTimer = new Timer(Calculations.random(60000,180000));
+            public Timer moveMouseTimer = new Timer(Calculations.random(30000,60000));
+            public void moveMouse(){
+                if(moveMouseTimer.finished()){
+                    Mouse.moveOutsideScreen(true);
+                moveMouseTimer = new Timer(Calculations.random(20000,220000));
+                moveMouseTimer.start();
+            }}
+}
 
 
-    }
 
 
